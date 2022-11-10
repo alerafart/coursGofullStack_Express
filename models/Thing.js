@@ -8,3 +8,7 @@ const thingSchema = mongoose.Schema({
     price: {type:Number, required:true},
 })
 module.exports =mongoose.model('Thing', thingSchema)
+
+// La méthode  Schema  de Mongoose vous permet de créer un schéma de données pour votre base de données MongoDB.
+
+// La méthode  model  transforme ce modèle en un modèle utilisable.
