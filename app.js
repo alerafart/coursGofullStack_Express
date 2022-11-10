@@ -1,6 +1,8 @@
 const express = require('express')
 const psx= require('./psx')
-const Thing = require('./models/Thing')
+
+const stuffRoutes = require('./routes/stuff')
+
 const mongoose = require('mongoose')
 const app = express()
 // mongoose.connect('mongodb+srv://gofullstack:<PASSWORD>@cluster0.z0lz7vb.mongodb.net/?retryWrites=true&w=majority',
@@ -9,7 +11,6 @@ mongoose.connect(psx,
     useUnifiedTopology: true})
   .then(() => console.log('Connexion à MongoDB réussie !'))
   .catch(() => console.log('Connexion à MongoDB échouée !'))
-
 
 
 // methode/middleware qu'intercepte toutes les requetes q'ont un content type json
@@ -28,45 +29,6 @@ app.use((req, res, next) => {
     next()
 });
 
-// methode pour créer un objet
-app.post('/api/stuff', (req, res, next)=> {
-    delete req.body._id //j'efface le champ id car il sera generé automatiquuement par la bdd
-    const thing = new Thing({
-        ...req.body
-    })
-    thing.save()
-        .then(() => res.status(201).json({message: 'objet enregistré !'}))
-        .catch(error => res.status(400).json({ error }))
-})
-
-// methode pour modifier un objet
-app.put('/api/stuff/:id', (req, res, next)=> {
-    Thing.updateOne({_id: req.params.id}, { ...req.body, _id: req.params.id})
-    .then(res.status(200).json({ message: 'Objet modifié !'}))
-    .catch(error => res.status(400).json({ error }))
-})
-
-// methode pour suprimer un objet
-app.delete('/api/stuff/:id', (req, res, next)=> {
-    Thing.deleteOne({_id: req.params.id}, { ...req.body, _id: req.params.id})
-    .then(res.status(200).json({ message: 'Objet supprimé !'}))
-    .catch(error => res.status(400).json({ error }))
-})
-
-// methode pour retrouver un objet par id
-app.get('/api/stuff/:id', (req, res, next) => {
-    Thing.findOne({_id: req.params.id})
-    .then(thing => res.status(200).json(thing)) //promise
-    .catch(error => res.status(404).json({error}))
-})
-
-// methode pour retrouver tous les objets
-app.get('/api/stuff', (req, res, next) => {
-    Thing.find()
-    .then(things => res.status(200).json(things)) //promise
-    .catch(error => res.status(400).json({error}))
-})
-// La base de données MongoDB est fractionnée en collections : le nom de la collection est défini par défaut sur le pluriel du nom du modèle. Ici, ce sera Things
-
+app.use('/api/stuff', stuffRoutes)
 
 module.exports = app;
