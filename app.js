@@ -1,6 +1,17 @@
-const express = require('express');
-
+const express = require('express')
+const psx= require('./psx')
+// const secret = psx
+const mongoose = require('mongoose')
 const app = express()
+// mongoose.connect('mongodb+srv://gofullstack:<PASSWORD>@cluster0.z0lz7vb.mongodb.net/?retryWrites=true&w=majority',
+mongoose.connect(psx,
+  { useNewUrlParser: true,
+    useUnifiedTopology: true
+    })
+  .then(() => console.log('Connexion à MongoDB réussie !'))
+  .catch(() => console.log('Connexion à MongoDB échouée !'));
+
+
 
 // methode/middleware qu'intercepte toutes les requetes q'ont un content type json
 // et mets le corps du contenu a dispo dans req.body
