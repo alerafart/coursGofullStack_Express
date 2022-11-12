@@ -12,6 +12,6 @@ fichier d'entrée doit s'appeler server.js
 `npm install mongoose`
 
 ### bcript package de chiffrement pour hachage/cryptage du mdp
-``
+`npm install --save bcrypt`
 ### package de validation
 `npm install mongoose-unique-validator`
