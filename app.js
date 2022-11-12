@@ -1,7 +1,9 @@
 const express = require('express')
 const psx= require('./psx')
 
+// import router
 const stuffRoutes = require('./routes/stuff')
+const userRoutes = require('./routes/user')
 
 const mongoose = require('mongoose')
 const app = express()
@@ -29,6 +31,7 @@ app.use((req, res, next) => {
     next()
 });
 
-app.use('/api/stuff', stuffRoutes)
+app.use('/api/stuff', stuffRoutes) // prefixe pour toutes les routes du stuffRoutes
+app.use('./api/auth', userRoutes)
 
 module.exports = app;
