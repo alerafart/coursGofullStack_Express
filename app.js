@@ -32,6 +32,6 @@ app.use((req, res, next) => {
 });
 
 app.use('/api/stuff', stuffRoutes) // prefixe pour toutes les routes du stuffRoutes
-app.use('./api/auth', userRoutes)
+app.use('/api/auth', userRoutes)
 
 module.exports = app;
