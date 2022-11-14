@@ -47,4 +47,8 @@ server.on('listening', () => {
   console.log('Listening on ' + bind);
 });
 
+process.on('warning', (warning) => {
+  console.log(warning.stack);
+});
+
 server.listen(port);

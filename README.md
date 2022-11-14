@@ -15,3 +15,6 @@ fichier d'entrée doit s'appeler server.js
 `npm install --save bcrypt`
 ### package de validation
 `npm install mongoose-unique-validator`
+
+### pachkage permets de creer des tokens et de les verifier
+`npm install jsonwebtoken`
