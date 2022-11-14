@@ -35,15 +35,13 @@ exports.login = (req, res, next) => {
                 // cas ou l'utilisateur existe ET le mdp est incorrect
                 else {
                     res.status(200).json({ 
-                    userId: user._id,
-                    token: jwt.sign(
-                        { userId: user._id}, //1er argument o payload ici le id du user
-                        'RANDOM_TOKEN_SECRET', //2em argument cle secrete pour l encodage, tres simple dans cet exemple
-                        {expiresIn: '24h'} // 3eme argument config
-                    )
-                })
-                // console.log(res.body, res.bcrypt, res.token)
-
+                        userId: user._id,
+                        token: jwt.sign(
+                            { userId: user._id}, //1er argument o payload ici le id du user
+                            'RANDOM_TOKEN_SECRET', //2em argument cle secrete pour l encodage, tres simple dans cet exemple
+                            {expiresIn: '24h'} // 3eme argument config
+                        )
+                    })
                 }
             })
             .catch(error => {

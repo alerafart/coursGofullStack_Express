@@ -18,3 +18,5 @@ fichier d'entrée doit s'appeler server.js
 
 ### pachkage permets de creer des tokens et de les verifier
 `npm install jsonwebtoken`
+
+`npm install multer`
