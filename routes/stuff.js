@@ -1,7 +1,9 @@
 const express = require('express')
+const router = express.Router()
 // const auth = require('auth')
 const auth = require('../middleware/auth')
-const router = express.Router()
+const multer = require('../middleware/multer-config')
+
 const stuffCtrl = require('../controllers/stuff')
 
 
@@ -11,7 +13,7 @@ const stuffCtrl = require('../controllers/stuff')
 
 //'*** ROUTES ***//
 router.get('/', auth, stuffCtrl.getAllThings) // il faut appeler aut avant le gestionnaire des routes afin qu'il puisse être utilisée par la méthode
-router.post('/', auth, stuffCtrl.createThing)
+router.post('/', auth, multer, stuffCtrl.createThing)
 router.put('/:id', auth, stuffCtrl.modifyThing)
 router.delete('/:id',auth, stuffCtrl.deleteThing)
 router.get('/:id', auth, stuffCtrl.getOneThing )
