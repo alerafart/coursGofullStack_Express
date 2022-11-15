@@ -1,14 +1,20 @@
 const express = require('express')
+// const auth = require('auth')
+const auth = require('../middleware/auth')
 const router = express.Router()
 const stuffCtrl = require('../controllers/stuff')
+
+
+
 // Ici dans le controller stuffCtrl j'ai deporté toute la logique des methodes du CRUD
 // pour garder dans ce fichier seulement les routes avec l'appel a chaque methode
 
 //'*** ROUTES ***//
-router.post('/', stuffCtrl.createThing)
-router.put('/:id', stuffCtrl.modifyThing)
-router.delete('/:id', stuffCtrl.deleteThing)
-router.get('/:id', stuffCtrl.getOneThing )
-router.get('/', stuffCtrl.getAllThings)
+router.get('/', auth, stuffCtrl.getAllThings) // il faut appeler aut avant le gestionnaire des routes afin qu'il puisse être utilisée par la méthode
+router.post('/', auth, stuffCtrl.createThing)
+router.put('/:id', auth, stuffCtrl.modifyThing)
+router.delete('/:id',auth, stuffCtrl.deleteThing)
+router.get('/:id', auth, stuffCtrl.getOneThing )
+
 
 module.exports = router

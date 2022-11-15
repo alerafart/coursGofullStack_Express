@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 
 exports.signup = (req, res, next) => {
     //en 1er hacher le mdp
-    console.log(bcrypt.hash(req.body.password, 10))
+    // console.log(bcrypt.hash(req.body.password, 10))
     bcrypt.hash(req.body.password, 10) //2eme param sont les tours de hachage, plus c'est grand plus c'est long a executer
     .then(hash => {
         const user = new User({
@@ -45,7 +45,7 @@ exports.login = (req, res, next) => {
                 }
             })
             .catch(error => {
-                res.status(500).json({ error }) //je tombe sur cette erreur
+                res.status(500).json({ error })
             })
         }
     })

@@ -16,7 +16,8 @@ fichier d'entrée doit s'appeler server.js
 ### package de validation
 `npm install mongoose-unique-validator`
 
-### pachkage permets de creer des tokens et de les verifier
+### package permets de creer des tokens et de les verifier
 `npm install jsonwebtoken`
 
+### package de gestion de fichiers.
 `npm install multer`
