@@ -1,5 +1,5 @@
 const Thing = require('../models/Thing')
-
+const fs = require('fs')
 // La base de données MongoDB est fractionnée en collections
 // le nom de la collection est défini par défaut sur le pluriel du nom du modèle
 // Ici, ce sera Things...
@@ -20,22 +20,6 @@ exports.getOneThing =(req, res, next) => {
     .catch(error => res.status(404).json({ error }))
 }
 
-// methode pour créer un objet ANCIENNE sans multer 
-// exports.createThing = (req, res, next)=> {
-//     delete req.body._id //j'efface le champ id car il sera generé automatiquuement par la bdd
-//     const thing = new Thing({
-//     // title: req.body.title,
-//     // description: req.body.description,
-//     // imageUrl: req.body.imageUrl,
-//     // price: req.body.price,
-//     // userId: req.body.userId
-//     ...req.body // identique aux 5 lignes precedentes
-//     })
-//     thing.save()
-//         .then(() => res.status(201).json({message: 'objet enregistré !'}))
-//         .catch(error => res.status(400).json({ error }))
-// }
-
 // methode pour créer un objet AVEC multer 
 exports.createThing = (req, res, next)=> {
     //1 parser objet requete 
@@ -53,7 +37,6 @@ exports.createThing = (req, res, next)=> {
 }
 
 // methode pour modifier un objet AVEC MULTER et gestion de fichier image
-
 exports.modifyThing = (req, res, next)=> {
     // selon s'il y a fichier transmis ou pas le format de requete est different. quand il y a fichier transmis on reçois une string/ nous recevrons l'élément form-data et le fichier; sinon uniquement un objet json.
     //Ce ternaire verifie si il y a un file transmise ou pas, si oui il fais un parse, sinon juste un req.body
@@ -77,9 +60,20 @@ exports.modifyThing = (req, res, next)=> {
 }
 
 // methode pour suprimer un objet
-exports.deleteThing = (req, res, next)=> {
-    Thing.deleteOne({_id: req.params.id}, { ...req.body, _id: req.params.id})
-    .then(res.status(200).json({ message: 'Objet supprimé !'}))
+exports.deleteThing = (req, res, next) => {
+    Thing.findOne({_id: req.params.id})
+    .then(thing => {
+        if(thing.userId != req.auth.userId) {
+            res.status(401).json({message: 'Not-authorized'})
+        } else {
+            const filename = thing.imageUrl.split('/images/')[1]
+            fs.unlink(`images/${filename}`, () => {
+                Thing.deleteOne({_id: req.params.id})
+                .then(() => { res.status(200).json({message: 'Objet supprimé !'})})
+                .catch(error => res.status(401).json({ error }))
+            })
+        }
+    })
     .catch(error => res.status(400).json({ error }))
 }
 
