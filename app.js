@@ -1,6 +1,6 @@
 const express = require('express')
 const psx= require('./psx')
-
+const path = require('path');
 // import router
 const stuffRoutes = require('./routes/stuff')
 const userRoutes = require('./routes/user')
@@ -31,6 +31,7 @@ app.use((req, res, next) => {
     next()
 });
 
+app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use('/api/stuff', stuffRoutes) // prefixe pour toutes les routes du stuffRoutes
 app.use('/api/auth', userRoutes)
 

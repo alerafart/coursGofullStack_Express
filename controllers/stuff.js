@@ -36,6 +36,7 @@ exports.getOneThing =(req, res, next) => {
 //         .catch(error => res.status(400).json({ error }))
 // }
 
+// methode pour créer un objet AVEC multer 
 exports.createThing = (req, res, next)=> {
     //1 parser objet requete 
     const thingObject = JSON.parse(req.body.thing)
@@ -51,11 +52,28 @@ exports.createThing = (req, res, next)=> {
     .catch(error => { res.status(400).json({ error })})
 }
 
-// methode pour modifier un objet
+// methode pour modifier un objet AVEC MULTER et gestion de fichier image
+
 exports.modifyThing = (req, res, next)=> {
-    Thing.updateOne({_id: req.params.id}, { ...req.body, _id: req.params.id})
-    .then(res.status(200).json({ message: 'Objet modifié !'}))
-    .catch(error => res.status(400).json({ error }))
+    // selon s'il y a fichier transmis ou pas le format de requete est different. quand il y a fichier transmis on reçois une string/ nous recevrons l'élément form-data et le fichier; sinon uniquement un objet json.
+    //Ce ternaire verifie si il y a un file transmise ou pas, si oui il fais un parse, sinon juste un req.body
+    const thingObject = req.file ? {
+        ...JSON.parse(req.body.thing),
+        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+    } : {...req.body}
+
+    delete thingObject._userId
+    Thing.findOne({_id: req.params.id})
+    .then((thing) => {
+        if(thing.userId != req.auth.userId) {
+            res.status(401).json({ message: 'Non autorisé'})
+        } else {
+            Thing.updateOne({ _id: req.params.id}, {...thingObject, _id: req.params.id})
+            .then(()=> res.status(200).json({message: 'Objet modifié!'}))
+            .catch(error => res.status(401).json({ error }))
+            
+        }
+    })
 }
 
 // methode pour suprimer un objet

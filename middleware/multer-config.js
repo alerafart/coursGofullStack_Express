@@ -6,6 +6,7 @@ const MIME_TYPES = {
     'image/png': 'png'
 }
 
+// Méthode diskStorage()  configure le chemin et le nom de fichier pour les fichiers entrants
 const storage = multer.diskStorage({
     destination:(req, file, callback) => {
         callback(null, 'images')
@@ -18,4 +19,5 @@ const storage = multer.diskStorage({
     }
 })
 
+// méthode single()  crée un middleware qui capture les fichiers d'un certain type (passé en argument), et les enregistre au système de fichiers du serveur à l'aide du storage configuré.
 module.exports = multer({ storage: storage }).single('image')
